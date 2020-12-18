@@ -160,7 +160,7 @@ class _AutoUpdateState extends State<AutoUpdate> {
         },
       );
     } catch (e) {
-      print('Failed to make OTA update. Details: $e');
+      showDialogMsg(e);
     }
   }
 }
