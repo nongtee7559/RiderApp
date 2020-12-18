@@ -18,12 +18,12 @@ import 'package:ota_update/ota_update.dart';
 import 'package:myapp/src/pages/splashscreen.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class CheckPermission extends StatefulWidget {
+class AutoUpdate extends StatefulWidget {
   @override
-  _CheckPermissionState createState() => _CheckPermissionState();
+  _AutoUpdateState createState() => _AutoUpdateState();
 }
 
-class _CheckPermissionState extends State<CheckPermission> {
+class _AutoUpdateState extends State<AutoUpdate> {
   bool status = false;
   CheckAppVersionResource resource = new CheckAppVersionResource();
   OtaEvent currentEvent;
@@ -70,9 +70,6 @@ class _CheckPermissionState extends State<CheckPermission> {
           );
         });
       } else {
-        var json = jsonDecode(value);
-        var errorMessage = json['errorMessage'];
-        print('errorMessage : ${errorMessage['errorText']}');
         showDialogMsg(errorMessage['errorText']);
       }
       return Center(
@@ -114,7 +111,7 @@ class _CheckPermissionState extends State<CheckPermission> {
                             100,
                     center: Text(
                         currentEvent == null
-                            ? "Downloading"
+                            ? "Check Version"
                             : currentEvent.status == OtaStatus.INSTALLING
                                 ? "Success"
                                 : "${currentEvent.value}%",

@@ -15,7 +15,7 @@ import 'package:myapp/src/themes/main_theme.dart';
 import 'package:myapp/src/utils/Constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myapp/src/checkPermission.dart';
+import 'package:myapp/src/auto_update.dart';
 
 class MyApp extends StatelessWidget {
   NetworkService networkService;
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
             future:  checkIsLogin(),
             builder: (context, snapshot) {
-              return CheckPermission();
+              return AutoUpdate();
             },
           )
       );

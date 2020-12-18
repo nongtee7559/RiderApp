@@ -295,58 +295,6 @@ class _PerformState extends State<Perform> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-//                width: 320,
-                              height: 85,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    LoginTheme.LoginendColor,
-                                    LoginTheme.LoginbeginColor,
-                                  ],
-                                ),
-                              ),
-                              child: new Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  new FlatButton(
-                                    onPressed: () {
-                                      final BottomNavigationBar
-                                          navigationBar =
-                                          navBarGlobalKey.currentWidget;
-                                      navigationBar.onTap(3);
-                                    },
-                                    child: new Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        txtSumPending.text == '0'
-                                            ? myAppBarIconZero()
-                                            : myAppBarIcon(),
-                                        new Text(
-                                          globals.employeeType == 'Supplier'
-                                              ? '     ข้อมูลความพร้อม Rider   '
-                                              : '   กดยืนยันงานที่คุณทำเมื่อวาน',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontFamily: 'KanitRegular'),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
 //                            width: 320,
                               height: 84,
                               decoration: BoxDecoration(
