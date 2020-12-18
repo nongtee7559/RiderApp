@@ -111,7 +111,7 @@ class _AutoUpdateState extends State<AutoUpdate> {
                             100,
                     center: Text(
                         currentEvent == null
-                            ? "Check Version"
+                            ? "Check Version..."
                             : currentEvent.status == OtaStatus.INSTALLING
                                 ? "Success"
                                 : "${currentEvent.value}%",
