@@ -7,6 +7,7 @@ import 'package:get_version/get_version.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:location/location.dart';
+// import 'package:myapp/src/models/MessageResource.dart';
 import 'package:myapp/src/my_app.dart';
 import 'package:myapp/src/pages/pincode_page.dart';
 import 'package:myapp/src/services/Strings.dart';
@@ -43,95 +44,97 @@ class _LoginPageState extends State<LoginPage> {
     networkService = NetworkService();
     super.initState();
   }
+
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.style(message: 'Please wait...');
-      return Scaffold(
-        body: Container(
-          height: double.infinity,
-          decoration: BoxDecoration(gradient: LoginTheme.gradient),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 150,
-                ),
-                Image.asset(
-                  'assets/images/header_1.gif',
-                  height: 95,
-                ),
-                SizedBox(height: 30),
-                _buildSignIn(context),
-                SizedBox(height: 50),
-                Container(
-                  width: 320,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(0)),
-                    gradient: LinearGradient(
-                      colors: [
-                        LoginTheme.LoginendColor,
-                        LoginTheme.LoginendColor,
-                      ],
-                    ),
-                  ),
-                  child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.white,
-                        child: Text(
-                          "ลืมรหัสผ่าน ?",
-                          style: TextStyle(fontFamily: 'KanitRegular'),
-                        ),
-                        onPressed: () {
-                          //todo
-                        },
-                      ),
-                      _buildDivider(),
-                      FlatButton(
-                        textColor: Colors.white,
-                        child: Text(
-                          "สมัคร",
-                          style: TextStyle(fontFamily: 'KanitRegular'),
-                        ),
-                        onPressed: () {
-                          //todo
-                        },
-                      ),
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(gradient: LoginTheme.gradient),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 150,
+              ),
+              Image.asset(
+                'assets/images/header_1.gif',
+                height: 95,
+              ),
+              SizedBox(height: 30),
+              _buildSignIn(context),
+              SizedBox(height: 50),
+              Container(
+                width: 320,
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                  gradient: LinearGradient(
+                    colors: [
+                      LoginTheme.LoginendColor,
+                      LoginTheme.LoginendColor,
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Version $AppVersion",
-                        style: new TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontFamily: 'KanitRegular'),
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      textColor: Colors.white,
+                      child: Text(
+                        "ลืมรหัสผ่าน ?",
+                        style: TextStyle(fontFamily: 'KanitRegular'),
                       ),
-                    ]),
-                SizedBox(
-                  height: 90,
+                      onPressed: () {
+                        //todo
+                      },
+                    ),
+                    _buildDivider(),
+                    FlatButton(
+                      textColor: Colors.white,
+                      child: Text(
+                        "สมัคร",
+                        style: TextStyle(fontFamily: 'KanitRegular'),
+                      ),
+                      onPressed: () {
+                        //todo
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Version $AppVersion",
+                      style: new TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontFamily: 'KanitRegular'),
+                    ),
+                  ]),
+              SizedBox(
+                height: 90,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   Stack _buildSignIn(BuildContext context) {
@@ -312,8 +315,8 @@ class _LoginPageState extends State<LoginPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Close'),
-              onPressed: () {
-                pr.hide();
+              onPressed: () async{
+                await pr.hide();
                 Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                 Navigator.of(context).pushReplacement(
                     new MaterialPageRoute(builder: (context) => MyApp()));
@@ -324,7 +327,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
 
   void showDialogInvid(String txttitle, String message) {
     showDialog<void>(
@@ -338,8 +340,8 @@ class _LoginPageState extends State<LoginPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Close'),
-              onPressed: () {
-                pr.hide();
+              onPressed: () async{
+                await pr.hide();
                 Navigator.of(dialogContext).pop(); // Dismiss alert dialog
               },
             ),
@@ -349,197 +351,223 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _buildLogin(String username, String password) {
-    pr.show();
+  void _buildLogin(String username, String password) async{
+    await pr.show();
     NetworkService()
         .postlogin(username, password, LatController.text, LongController.text,
             DeviceID, Serial, '')
         .then(
       (value) async {
-        try{
-        if (value != null) {
-          var json = jsonDecode(value);
-          var token = json['token'];
-          var errorMessage = json['errorMessage'];
-          if (errorMessage['isError'] == false) {
-            if (json['returnCode'] == "0000") {
-              if (token['token'] != null) {
-                var expiration = token['expiration'];
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                var payload = Jwt.parseJwt(token['token']);
-                var storelist = payload['stores'];
-                var userProfile = json['userProfile'];
-                await prefs.setString(
-                    's_USER_GENDER', userProfile['s_USER_GENDER'].toString());
-                await prefs.setString('user_Profile', userProfile.toString());
-                await prefs.setString(
-                    'clientList', jsonEncode(userProfile['clients']));
-                await prefs.setString('i_EMP_ID', userProfile['i_EMP_ID'].toString());
-                await prefs.setString('s_USER_ID', userProfile['s_USER_ID']);
-                await prefs.setString('expiration', expiration);
-                ////////////////////////////////////////////////////////////////
-                globals.token = 'Bearer ' + token['token'];
-                globals.onlyToken = token['token'];
-                globals.companyId = userProfile['companyId'];
-                globals.i_EMP_ID = userProfile['i_EMP_ID'].toString();
-                globals.employeeType = userProfile['employeeType'];
-                globals.sPhoneNo = userProfile['s_PHONE_NO'];
-                globals.s_EMP_TYPE = userProfile['s_EMP_TYPE'];
-                globals.listStores = jsonDecode(storelist);
-                globals.Fname = userProfile['s_USER_FNAME'];
-                globals.Lname = userProfile['s_USER_LNAME'];
-                globals.s_User_ID = userProfile['s_USER_ID'];
-                globals.s_EMP_NO = userProfile['s_EMP_NO'];
-                var localImage;
-                bool chacklocalImage;
-                bool Directory_Path;
-                Directory_Path = prefs.getBool('Directory_Path_bool');
-                if (Directory_Path != null) {
-                  chacklocalImage = prefs.getBool('localImage_bool');
-                  localImage = prefs.getString('localImage').toString();
-                  globals.user_Path = prefs.getString('user_localImage${globals.s_User_ID}');
-                  if (globals.user_Path == null) {
-                    globals.user_Path = "assets/images/Profile_1.jpg";
+        try {
+          if (value != null) {
+            var json = jsonDecode(value);
+            var token = json['token'];
+            var errorMessage = json['errorMessage'];
+            if (errorMessage['isError'] == false) {
+              if (json['returnCode'] == "0000") {
+                if (token['token'] != null) {
+                  var expiration = token['expiration'];
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  var payload = Jwt.parseJwt(token['token']);
+                  var storelist = payload['stores'];
+                  var userProfile = json['userProfile'];
+                  await prefs.setString(
+                      's_USER_GENDER', userProfile['s_USER_GENDER'].toString());
+                  await prefs.setString('user_Profile', userProfile.toString());
+                  await prefs.setString(
+                      'clientList', jsonEncode(userProfile['clients']));
+                  await prefs.setString(
+                      'i_EMP_ID', userProfile['i_EMP_ID'].toString());
+                  await prefs.setString('s_USER_ID', userProfile['s_USER_ID']);
+                  await prefs.setString('expiration', expiration);
+                  ////////////////////////////////////////////////////////////////
+                  globals.token = 'Bearer ' + token['token'];
+                  globals.onlyToken = token['token'];
+                  globals.companyId = userProfile['companyId'];
+                  globals.i_EMP_ID = userProfile['i_EMP_ID'].toString();
+                  globals.employeeType = userProfile['employeeType'];
+                  globals.sPhoneNo = userProfile['s_PHONE_NO'];
+                  globals.s_EMP_TYPE = userProfile['s_EMP_TYPE'];
+                  globals.listStores = jsonDecode(storelist);
+                  globals.Fname = userProfile['s_USER_FNAME'];
+                  globals.Lname = userProfile['s_USER_LNAME'];
+                  globals.s_User_ID = userProfile['s_USER_ID'];
+                  globals.s_EMP_NO = userProfile['s_EMP_NO'];
+                  // _GetMessage();
+                  var localImage;
+                  bool chacklocalImage;
+                  bool Directory_Path;
+                  Directory_Path = prefs.getBool('Directory_Path_bool');
+                  if (Directory_Path != null) {
+                    chacklocalImage = prefs.getBool('localImage_bool');
+                    localImage = prefs.getString('localImage').toString();
+                    globals.user_Path =
+                        prefs.getString('user_localImage${globals.s_User_ID}');
+                    if (globals.user_Path == null) {
+                      globals.user_Path = "assets/images/Profile_1.jpg";
+                    }
+                  } else {
+                    chacklocalImage = prefs.getBool('localImage_bool');
                   }
-                } else {
-                  chacklocalImage = prefs.getBool('localImage_bool');
-                }
-                if (globals.employeeType != 'Supplier') {
-                  if (globals.s_EMP_TYPE == 'ET00') {
-                    globals.isAdmin = true;
-                    globals.isRider = false;
-                    globals.isSup = false;
+                  if (globals.employeeType != 'Supplier') {
+                    if (globals.s_EMP_TYPE == 'ET00') {
+                      globals.isAdmin = true;
+                      globals.isRider = false;
+                      globals.isSup = false;
+                    } else {
+                      globals.isAdmin = false;
+                      globals.isSup = false;
+                      globals.isRider = true;
+                    }
+                    chacklocalImage == null
+                        ? globals.Path_ImageProfile =
+                            "assets/images/Profile_1.jpg"
+                        : globals.Path_ImageProfile = localImage.toString();
+                    globals.Path_Imageheader = "assets/images/header_main.jpg";
                   } else {
                     globals.isAdmin = false;
-                    globals.isSup = false;
-                    globals.isRider = true;
+                    globals.isRider = false;
+                    globals.isSup = true;
+                    chacklocalImage == null
+                        ? globals.Path_ImageProfile =
+                            "assets/images/Profile_Store.jpg"
+                        : globals.Path_ImageProfile = localImage;
+                    globals.Path_Imageheader =
+                        "assets/images/header_main_admin.jpg";
                   }
-                  chacklocalImage == null
-                      ? globals.Path_ImageProfile = "assets/images/Profile_1.jpg"
-                      : globals.Path_ImageProfile = localImage.toString();
-                  globals.Path_Imageheader = "assets/images/header_main.jpg";
-                } else {
-                  globals.isAdmin = false;
-                  globals.isRider = false;
-                  globals.isSup = true;
-                  chacklocalImage == null
-                      ? globals.Path_ImageProfile = "assets/images/Profile_Store.jpg"
-                      : globals.Path_ImageProfile = localImage;
-                  globals.Path_Imageheader = "assets/images/header_main_admin.jpg";
-                }
-                ////////////////////////////////////////////////////////////////
-                await NetworkService()
-                    .postcheckpin(Serial, globals.i_EMP_ID, globals.s_User_ID)
-                    .then(
-                  (value) async {
-                    print('response CheclHasPin : ${value}');
-                    try{
-                    var hasPin;
-                    if (value != null) {
-                      var json = jsonDecode(value);
-                      var token = json['token'];
-                      var errorMessage = json['errorMessage'];
-                      hasPin = json['hasPin'];
-                      print(
-                          'errorMessagevvvvvvvvvvvvvvv : ${errorMessage['isError']}');
-                      if (errorMessage['isError'] == false) {
-                        print("hasPin : $hasPin");
-                        if (hasPin == true) {
-                          pr.hide();
-                          await prefs.setString('hasPin', "true");
-                          print("asdfasdfasdfsdf");
-                          await Navigator.pushAndRemoveUntil(
-                              context,
-                              PageRouteBuilder(pageBuilder:
-                                  (BuildContext context, Animation animation,
-                                      Animation secondaryAnimation) {
-                                return PincodePage();
-                              }, transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return new SlideTransition(
-                                  position: new Tween<Offset>(
-                                    begin: const Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              }),
-                              (Route route) => false);
-                        } else {
-                          await prefs.remove('hasPin');
-                          pr.hide();
-                          await Navigator.pushAndRemoveUntil(
-                              context,
-                              PageRouteBuilder(pageBuilder:
-                                  (BuildContext context, Animation animation,
-                                      Animation secondaryAnimation) {
-                                return PincodePage();
-                              }, transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return new SlideTransition(
-                                  position: new Tween<Offset>(
-                                    begin: const Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              }),
-                              (Route route) => false);
+                  ////////////////////////////////////////////////////////////////
+                  await NetworkService()
+                      .postcheckpin(Serial, globals.i_EMP_ID, globals.s_User_ID)
+                      .then(
+                    (value) async {
+                      print('response CheclHasPin : ${value}');
+                      try {
+                        var hasPin;
+                        if (value != null) {
+                          var json = jsonDecode(value);
+                          var token = json['token'];
+                          var errorMessage = json['errorMessage'];
+                          hasPin = json['hasPin'];
+                          print(
+                              'errorMessagevvvvvvvvvvvvvvv : ${errorMessage['isError']}');
+                          if (errorMessage['isError'] == false) {
+                            print("hasPin : $hasPin");
+                            if (hasPin == true) {
+                              await pr.hide();
+                              await prefs.setString('hasPin', "true");
+                              print("asdfasdfasdfsdf");
+                              await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageRouteBuilder(pageBuilder:
+                                      (BuildContext context,
+                                          Animation animation,
+                                          Animation secondaryAnimation) {
+                                    return PincodePage();
+                                  }, transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return new SlideTransition(
+                                      position: new Tween<Offset>(
+                                        begin: const Offset(1.0, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    );
+                                  }),
+                                  (Route route) => false);
+                            } else {
+                              await prefs.remove('hasPin');
+                              await pr.hide();
+                              await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageRouteBuilder(pageBuilder:
+                                      (BuildContext context,
+                                          Animation animation,
+                                          Animation secondaryAnimation) {
+                                    return PincodePage();
+                                  }, transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return new SlideTransition(
+                                      position: new Tween<Offset>(
+                                        begin: const Offset(1.0, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    );
+                                  }),
+                                  (Route route) => false);
+                            }
+                          } else {
+                            print("dddddddddddddddddd");
+                            var json = jsonDecode(value);
+                            var errorMessage = json['errorMessage'];
+                            print(
+                                'errorMessage : ${errorMessage['errorText']}');
+                          }
+                          await pr.hide();
                         }
-                      } else {
-                        print("dddddddddddddddddd");
-                        var json = jsonDecode(value);
-                        var errorMessage = json['errorMessage'];
-                        print('errorMessage : ${errorMessage['errorText']}');
+                        return hasPin;
+                      } on FormatException catch (e) {
+                        await pr.hide();
+                        showDialogInvid('Error ', e.toString());
                       }
-                      pr.hide();
-                    }
-                    return hasPin;
-                    } on FormatException catch (e) {
-                      pr.hide();
-                      showDialogInvid('Error ',e.toString());
-                    }
-                  },
-                );
-                pr.hide();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    PageRouteBuilder(pageBuilder: (BuildContext context,
-                        Animation animation, Animation secondaryAnimation) {
-                      return PincodePage();
-                    }, transitionsBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation,
-                        Widget child) {
-                      return new SlideTransition(
-                        position: new Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    }),
-                    (Route route) => false);
+                    },
+                  );
+                  await pr.hide();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(pageBuilder: (BuildContext context,
+                          Animation animation, Animation secondaryAnimation) {
+                        return PincodePage();
+                      }, transitionsBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation,
+                          Widget child) {
+                        return new SlideTransition(
+                          position: new Tween<Offset>(
+                            begin: const Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      }),
+                      (Route route) => false);
+                }
               }
+            } else {
+              var json = jsonDecode(value);
+              var errorMessage = json['errorMessage'];
+              showDialogInvid("Login", errorMessage['errorText']);
             }
-          } else {
-            var json = jsonDecode(value);
-            var errorMessage = json['errorMessage'];
-            showDialogInvid("Login", errorMessage['errorText']);
           }
+          setState(() {});
+        } on FormatException catch (e) {
+          await pr.hide();
+          showDialogInvid('Error ', e.toString());
         }
-        setState(() {});
-      } on FormatException catch (e) {
-      pr.hide();
-      showDialogInvid('Error ',e.toString());
-    }
       },
     );
   }
+
+  // _GetMessage() async {
+  //   networkService.GetMessage().then((value) async {
+  //     var json = jsonDecode(value);
+  //     var errorMessage = json['errorMessage'];
+  //     if (errorMessage['isError'] == false) {
+  //       final responseJson = jsonDecode(value.toString());
+  //       var data = MessageResource.fromJson(responseJson);
+  //       globals.listMessage = data.msg;
+  //     }else{
+  //       showDialogInvid('Error ', errorMessage['errorText']);
+  //     }
+  //   });
+  //
+  // }
+
   trackingLocation() async {
     AppVersion = await GetVersion.projectVersion;
     setState(() {});
@@ -564,44 +592,43 @@ class _LoginPageState extends State<LoginPage> {
       var model = iosInfo.model;
       print('$systemName $version, $name $model');
     }
-    try{
-    final Location _locationService = Location();
-    await _locationService.changeSettings(
-      accuracy: LocationAccuracy.HIGH,
-      interval: 10000,
-      distanceFilter: 100,
-    ); // meters.
-    if (await _locationService.serviceEnabled()) {
-      var locationupdate = await _locationService.getLocation();
-      LatController.text = locationupdate.latitude.toString();
-      LongController.text = locationupdate.longitude.toString();
-      print('_locationService.serviceEnabled');
-      if (await _locationService.requestPermission() ==
-          PermissionStatus.GRANTED) {
-        print('_locationService.requestPermission');
-        _locationSubscription = _locationService.onLocationChanged().listen(
-          (LocationData result) async {
-            final latLng = LatLng(result.latitude, result.longitude);
-            LatController.text = result.latitude.toString();
-            LongController.text = result.longitude.toString();
-          },
-        );
+    try {
+      final Location _locationService = Location();
+      await _locationService.changeSettings(
+        accuracy: LocationAccuracy.HIGH,
+        interval: 10000,
+        distanceFilter: 100,
+      ); // meters.
+      if (await _locationService.serviceEnabled()) {
+        var locationupdate = await _locationService.getLocation();
+        LatController.text = locationupdate.latitude.toString();
+        LongController.text = locationupdate.longitude.toString();
+        print('_locationService.serviceEnabled');
+        if (await _locationService.requestPermission() ==
+            PermissionStatus.GRANTED) {
+          print('_locationService.requestPermission');
+          _locationSubscription = _locationService.onLocationChanged().listen(
+            (LocationData result) async {
+              final latLng = LatLng(result.latitude, result.longitude);
+              LatController.text = result.latitude.toString();
+              LongController.text = result.longitude.toString();
+            },
+          );
+        } else {
+          print('Permission denied');
+        }
       } else {
-        print('Permission denied');
+        print('_locationService.serviceDisable');
+        bool serviceStatusResult = await _locationService.requestService();
+        print("Service status activated after request: $serviceStatusResult");
+        if (serviceStatusResult) {
+          // trackingLocation();
+        } else {
+          print('Service denied');
+        }
       }
-    } else {
-      print('_locationService.serviceDisable');
-      bool serviceStatusResult = await _locationService.requestService();
-      print("Service status activated after request: $serviceStatusResult");
-      if (serviceStatusResult) {
-        // trackingLocation();
-      } else {
-        print('Service denied');
-      }
-    }
     } on Exception catch (exception) {
       showDialogException('Exception', exception.toString());
-
     } catch (error) {
       showDialogException('error', error.toString());
     }
