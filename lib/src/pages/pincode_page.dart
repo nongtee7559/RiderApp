@@ -10,6 +10,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:location/location.dart';
 import 'package:myapp/src/models/client_response.dart';
 import 'package:myapp/src/pages/launcher.dart';
+import 'package:myapp/src/pages/login_page.dart';
 import 'package:myapp/src/pages/splashscreen.dart';
 import 'package:myapp/src/services/network_service.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -475,7 +476,7 @@ class PincodePageState extends State<PincodePage> {
                   context,
                   PageRouteBuilder(pageBuilder: (BuildContext context,
                       Animation animation, Animation secondaryAnimation) {
-                    return SplashscreenPage();
+                    return LoginPage();
                   }, transitionsBuilder: (BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation,
@@ -522,7 +523,7 @@ class PincodePageState extends State<PincodePage> {
                   context,
                   PageRouteBuilder(pageBuilder: (BuildContext context,
                       Animation animation, Animation secondaryAnimation) {
-                    return SplashscreenPage();
+                    return LoginPage();
                   }, transitionsBuilder: (BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation,

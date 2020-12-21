@@ -6,6 +6,7 @@ import 'package:get_version/get_version.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/src/pages/login_page.dart';
 import 'package:myapp/src/services/network_service.dart';
 import 'package:myapp/src/themes/main_theme.dart';
 import 'package:myapp/src/utils/Constant.dart';
@@ -128,7 +129,7 @@ class _AutoUpdateState extends State<AutoUpdate> {
         ),
       );
     }
-    return SplashscreenPage();
+    return  LoginPage();
   }
 
   void showDialogMsg(String message) {
