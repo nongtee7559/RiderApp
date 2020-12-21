@@ -57,7 +57,7 @@ class _SplashscreenPageState extends State<SplashscreenPage> {
       print('$systemName $version, $name $model');
       // iOS 13.1, iPhone 11 Pro Max iPhone
     }
-    String checkhasuser = globals.s_User_ID ?? null;
+    String checkhasuser = await prefs.getString('s_USER_ID') ?? null;
     if (checkhasuser == null) {
       pr.hide();
       Navigator.pushAndRemoveUntil(
