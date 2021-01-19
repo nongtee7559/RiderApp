@@ -616,13 +616,14 @@ class NetworkService {
   }
 
   Future<String> PostMasterDropdownList(
-      String table, String groupReason, {String storeNo = ""}) async {
+      String table, String groupReason, {String storeNo = "", String date = ""}) async {
     var url = Strings.RootService + '/api/master/dropdownlist';
     Map<String, String> headers = {
       'Content-type': 'application/json',
       'Authorization': globals.token
     };
-    var bodys = json.encode({'table': table, 'groupReason': groupReason,'StoreNo':storeNo});
+    var bodys = json.encode({'table': table, 'groupReason': groupReason,'StoreNo':storeNo,'Date':date});
+    print(bodys);
     var response = await http.post(url, body: bodys, headers: headers);
     return response.body;
   }

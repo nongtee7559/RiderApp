@@ -79,7 +79,7 @@ class _ApproveReadyState extends State<ApproveReady>
   Future<void> _buildGetShifttime(String storeNo, StateSetter setState) async {
     NetworkService()
         .PostMasterDropdownList("STORE_SHIFTTIME", "",
-            storeNo: storeNo)
+            storeNo: storeNo,date: selectDate.toIso8601String())
         .then((value) async {
       var json = jsonDecode(value);
       var errorMessage = json['errorMessage'];
