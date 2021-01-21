@@ -672,4 +672,15 @@ class NetworkService {
     var response = await http.get(url, headers: headers);
     return response.body;
   }
+
+  Future<String> GetMessage() async
+  {
+    var url = Strings.RootService + '/api/transaction/message';
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Authorization': globals.token
+    };
+    var response = await http.get(url, headers: headers);
+    return response.body;
+  }
 }

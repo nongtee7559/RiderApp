@@ -72,8 +72,11 @@ class _StartstopState extends State<Startstop> {
     networkService = NetworkService();
     datePre.text = DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
     timePre.text = DateFormat('kk:mm:ss').format(DateTime.now()).toString();
-    trackingLocation();
-    _buildCheckStatusSubstitute();
+    // trackingLocation();
+    // _buildCheckStatusSubstitute();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      notifyAlert();
+    });
     super.initState();
   }
   @override
@@ -246,39 +249,39 @@ class _StartstopState extends State<Startstop> {
     });
   }
 
-  _cropImage() {
-    ImageCropper.cropImage(
-      sourcePath: _imageFile.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.blue,
-          toolbarWidgetColor: Colors.white,
-          statusBarColor: Colors.black,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        minimumAspectRatio: 1.0,
-      ),
-      compressQuality: 40,
-      maxWidth: 300,
-      maxHeight: 300,
-      //circleShape: true
-    ).then((file) {
-      if (file != null) {
-        setState(() {
-          _imageFile = file;
-          imagePath = _imageFile.path;
-        });
-      }
-    });
-  }
+  // _cropImage() {
+  //   ImageCropper.cropImage(
+  //     sourcePath: _imageFile.path,
+  //     aspectRatioPresets: [
+  //       CropAspectRatioPreset.square,
+  //       CropAspectRatioPreset.ratio3x2,
+  //       CropAspectRatioPreset.original,
+  //       CropAspectRatioPreset.ratio4x3,
+  //       CropAspectRatioPreset.ratio16x9
+  //     ],
+  //     androidUiSettings: AndroidUiSettings(
+  //         toolbarTitle: 'Cropper',
+  //         toolbarColor: Colors.blue,
+  //         toolbarWidgetColor: Colors.white,
+  //         statusBarColor: Colors.black,
+  //         initAspectRatio: CropAspectRatioPreset.original,
+  //         lockAspectRatio: false),
+  //     iosUiSettings: IOSUiSettings(
+  //       minimumAspectRatio: 1.0,
+  //     ),
+  //     compressQuality: 40,
+  //     maxWidth: 300,
+  //     maxHeight: 300,
+  //     //circleShape: true
+  //   ).then((file) {
+  //     if (file != null) {
+  //       setState(() {
+  //         _imageFile = file;
+  //         imagePath = _imageFile.path;
+  //       });
+  //     }
+  //   });
+  // }
 
   void show_Dialog(String message) {
     showDialog<void>(
@@ -547,36 +550,40 @@ class _StartstopState extends State<Startstop> {
     );
   }
 
-  Future<void> _buildCheckStatusSubstitute() async {
-    DateTime now1 = DateTime.now();
-    final now = DateTime(now1.year, now1.month, now1.day + 1);
-    String date = DateFormat('yyyy-MM-dd').format(now);
-    try {
-      NetworkService().postCheckStatusSubstitute(globals.i_EMP_ID, date).then(
-        (value) async {
-          var json = jsonDecode(value);
-          var errorMessage = json['errorMessage'];
-          if (errorMessage['isError'] == false) {
-            setState(() {
-              StatusReplace = json['isWait'];
-            });
-            setState(() {
-              return Center(
-                child: RefreshProgressIndicator(),
-              );
-            });
-          } else {
-            showDialogInvid(errorMessage['errorText']);
-          }
-          return Center(
-            child: RefreshProgressIndicator(),
-          );
-        },
-      );
-    } catch (e) {
-      showDialogInvid(e.toString());
-    }
+  void notifyAlert(){
+    var msg = globals.listMessage.firstWhere((value) => value.sMsgCode == "100" && value.sMsgType == "notify").sMsg;
+    showDialogAcceap(msg);
   }
+  // Future<void> _buildCheckStatusSubstitute() async {
+  //   DateTime now1 = DateTime.now();
+  //   final now = DateTime(now1.year, now1.month, now1.day + 1);
+  //   String date = DateFormat('yyyy-MM-dd').format(now);
+  //   try {
+  //     NetworkService().postCheckStatusSubstitute(globals.i_EMP_ID, date).then(
+  //       (value) async {
+  //         var json = jsonDecode(value);
+  //         var errorMessage = json['errorMessage'];
+  //         if (errorMessage['isError'] == false) {
+  //           setState(() {
+  //             StatusReplace = json['isWait'];
+  //           });
+  //           setState(() {
+  //             return Center(
+  //               child: RefreshProgressIndicator(),
+  //             );
+  //           });
+  //         } else {
+  //           showDialogInvid(errorMessage['errorText']);
+  //         }
+  //         return Center(
+  //           child: RefreshProgressIndicator(),
+  //         );
+  //       },
+  //     );
+  //   } catch (e) {
+  //     showDialogInvid(e.toString());
+  //   }
+  // }
 
   Future<void> _buildStartstop() async {
     await pr.update(message: "กำลังบันทึกข้อมูล...");

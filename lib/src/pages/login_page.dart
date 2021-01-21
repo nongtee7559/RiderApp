@@ -7,6 +7,7 @@ import 'package:get_version/get_version.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:location/location.dart';
+import 'package:myapp/src/models/MessageResource.dart';
 // import 'package:myapp/src/models/MessageResource.dart';
 import 'package:myapp/src/my_app.dart';
 import 'package:myapp/src/pages/pincode_page.dart';
@@ -394,7 +395,7 @@ class _LoginPageState extends State<LoginPage> {
                   globals.Lname = userProfile['s_USER_LNAME'];
                   globals.s_User_ID = userProfile['s_USER_ID'];
                   globals.s_EMP_NO = userProfile['s_EMP_NO'];
-                  // _GetMessage();
+                  _GetMessage();
                   var localImage;
                   bool chacklocalImage;
                   bool Directory_Path;
@@ -553,20 +554,20 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // _GetMessage() async {
-  //   networkService.GetMessage().then((value) async {
-  //     var json = jsonDecode(value);
-  //     var errorMessage = json['errorMessage'];
-  //     if (errorMessage['isError'] == false) {
-  //       final responseJson = jsonDecode(value.toString());
-  //       var data = MessageResource.fromJson(responseJson);
-  //       globals.listMessage = data.msg;
-  //     }else{
-  //       showDialogInvid('Error ', errorMessage['errorText']);
-  //     }
-  //   });
-  //
-  // }
+  _GetMessage() async {
+    networkService.GetMessage().then((value) async {
+      var json = jsonDecode(value);
+      var errorMessage = json['errorMessage'];
+      if (errorMessage['isError'] == false) {
+        final responseJson = jsonDecode(value.toString());
+        var data = MessageResource.fromJson(responseJson);
+        globals.listMessage = data.msg;
+      }else{
+        showDialogInvid('Error ', errorMessage['errorText']);
+      }
+    });
+
+  }
 
   trackingLocation() async {
     AppVersion = await GetVersion.projectVersion;

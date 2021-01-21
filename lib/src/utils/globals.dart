@@ -1,5 +1,7 @@
 library my_prj.globals;
 import 'dart:io';
+
+import 'package:myapp/src/models/MessageResource.dart';
 bool isSup = false;
 bool isRider = false;
 bool isAdmin = false;
@@ -19,3 +21,4 @@ String sPhoneNo;
 String i_EMP_ID;
 String companyId;
 List listStores = List();
+List<Msg> listMessage = new List<Msg>();
