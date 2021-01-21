@@ -32,6 +32,7 @@ class MessageResource {
   };
 }
 
+
 class ErrorMessage {
   ErrorMessage({
     this.errorMessages,
