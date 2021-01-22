@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
             future:  checkIsLogin(),
             builder: (context, snapshot) {
-              return AutoUpdate();
+              return LoginPage();
             },
           )
       );
