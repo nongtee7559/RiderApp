@@ -45,7 +45,7 @@ dependencies:
   device_info: ^0.4.2+4
   progress_dialog: ^1.2.2
   datetime_picker_formfield: ^1.0.0
-  pinput: ^0.2.4
+  pinput: 0.2.5
   gallery_saver: ^2.0.1
   flutter_screenutil: ^2.3.0
   flutter_downloader: ^1.4.4

@@ -227,7 +227,7 @@ class _ProfilePreviewState extends State<ProfilePreview> {
                                     fontFamily: 'KanitRegular'),
                               ),
                               Text(
-                                globals.sPhoneNo,
+                                globals.sPhoneNo ?? "-",
                                 style: new TextStyle(
                                     fontSize: 18,
                                     color: Colors.black87,
